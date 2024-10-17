@@ -1,0 +1,28 @@
+name: sops
+adopt-info: sops
+base: core24
+summary: Simple and flexible tool for managing secrets
+description: |
+  SOPS is an editor of encrypted files that supports YAML, JSON, ENV, INI and BINARY formats
+  and encrypts with AWS KMS, GCP KMS, Azure Key Vault, age, and PGP.
+
+  Ref - https://github.com/getsops/sops.
+
+license: MPL-2.0
+confinement: strict
+
+apps:
+  sops:
+    command: usr/bin/sops
+    plugs:
+      - home
+      - network
+
+parts:
+  sops:
+    plugin: dump
+    source: https://github.com/getsops/sops/releases/download/v3.9.1/sops_3.9.1_amd64.deb
+    source-type: deb
+    override-stage: |
+      craftctl set version=$(${CRAFT_PART_BUILD}/usr/bin/sops -v | awk -F ' ' '{print $2}')
+      craftctl default
